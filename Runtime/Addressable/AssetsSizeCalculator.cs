@@ -9,13 +9,13 @@ using Edger.Unity;
 using Edger.Unity.Context;
 
 namespace Edger.Unity.Addressable {
-    public class AssetsSizeCalculator : AssetsOperator<AssetsPreloader.Req, long> {
-        protected override string GetOperationKey(AssetsPreloader.Req req) {
-            return req.Key;
+    public class AssetsSizeCalculator : AssetsOperator<string, long> {
+        protected override string GetOperationKey(string req) {
+            return req;
         }
 
-        protected override AsyncOperationHandle CreateOperationHandle(AssetsPreloader.Req req) {
-            return Addressables.GetDownloadSizeAsync(req.Key);
+        protected override AsyncOperationHandle CreateOperationHandle(string req) {
+            return Addressables.GetDownloadSizeAsync(req);
         }
     }
 }
