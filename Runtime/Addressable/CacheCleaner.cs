@@ -9,7 +9,7 @@ using Edger.Unity;
 using Edger.Unity.Context;
 
 namespace Edger.Unity.Addressable {
-    public class CacheCleaner : AssetsOperator<CacheCleaner.Req> {
+    public class CacheCleaner : AssetsOperator<CacheCleaner.Req, bool> {
         public struct Req {
             public static Req PRESERVE_ALL = new Req { PreserveOnlyCategories = null };
 

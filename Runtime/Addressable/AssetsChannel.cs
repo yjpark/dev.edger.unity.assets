@@ -25,9 +25,10 @@ namespace Edger.Unity.Addressable {
             public IAssetsOperator Operator { get; init; }
             public string Key { get; init; }
             public DownloadStatus Status { get; init; }
+            public object Result { get; init; }
 
             public override string ToString() {
-                return string.Format("<{0}> {{ Key = {1}, Status = {2}/{3} }}", Operator.GetType().Name, Key, Status.DownloadedBytes, Status.TotalBytes);
+                return string.Format("<{0}> {{ Key = {1}, Status = {2}/{3} Result = {4} }}", Operator.GetType().Name, Key, Status.DownloadedBytes, Status.TotalBytes, Result);
             }
         }
         public struct OperationFailed {
