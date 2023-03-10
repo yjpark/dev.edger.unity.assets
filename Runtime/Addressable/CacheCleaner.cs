@@ -15,7 +15,6 @@ namespace Edger.Unity.Addressable {
 
             public string[] PreserveOnlyCategories { get; init; }
 
-
             public override string ToString() {
                 return string.Format("{{ PreserveOnlyCategories = {0} }}", GetOperationKey());
             }

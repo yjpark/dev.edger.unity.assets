@@ -18,7 +18,7 @@ namespace Edger.Unity.Addressable {
             public DownloadStatus Status { get; init; }
 
             public override string ToString() {
-                return string.Format("{{ Key = {0}, Status = {1}/{2} }}", Key, Status.DownloadedBytes, Status.TotalBytes);
+                return string.Format("<{0}> {{ Key = {1}, Status = {2}/{3} }}", Operator.GetType().Name, Key, Status.DownloadedBytes, Status.TotalBytes);
             }
         }
         public struct OperationSucceeded {
@@ -27,7 +27,7 @@ namespace Edger.Unity.Addressable {
             public DownloadStatus Status { get; init; }
 
             public override string ToString() {
-                return string.Format("{{ Key = {0}, Status = {1}/{2} }}", Key, Status.DownloadedBytes, Status.TotalBytes);
+                return string.Format("<{0}> {{ Key = {1}, Status = {2}/{3} }}", Operator.GetType().Name, Key, Status.DownloadedBytes, Status.TotalBytes);
             }
         }
         public struct OperationFailed {
@@ -37,7 +37,7 @@ namespace Edger.Unity.Addressable {
             public Exception Error { get; init; }
 
             public override string ToString() {
-                return string.Format("{{ Key = {0}, Status = {1}/{2}, Error = {3} }}", Key, Status.DownloadedBytes, Status.TotalBytes, Error);
+                return string.Format("<{0}> {{ Key = {1}, Status = {2}/{3}, Error = {4} }}", Operator.GetType().Name, Key, Status.DownloadedBytes, Status.TotalBytes, Error);
             }
         }
         public class Evt : OneOfBase<OperationProgress, OperationSucceeded, OperationFailed> {
