@@ -9,7 +9,7 @@ using Edger.Unity;
 using Edger.Unity.Context;
 
 namespace Edger.Unity.Addressable {
-    public class AssetLoader : ContentLoader<AssetLoader.Req> {
+    public class AssetsPreloader : AssetsOperator<AssetsPreloader.Req> {
         public struct Req {
             public String Key { get; init; }
 
@@ -18,7 +18,7 @@ namespace Edger.Unity.Addressable {
             }
         }
 
-        protected override string GetContentKey(Req req) {
+        protected override string GetOperationKey(Req req) {
             return req.Key;
         }
 

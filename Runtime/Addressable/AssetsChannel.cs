@@ -11,8 +11,9 @@ using Edger.Unity;
 using Edger.Unity.Context;
 
 namespace Edger.Unity.Addressable {
-    public class ContentChannel : Channel<ContentChannel.Evt> {
-        public struct DownloadProgress {
+    public class AssetsChannel : Channel<AssetsChannel.Evt> {
+        public struct OperationProgress {
+            public IAssetsOperator Operator { get; init; }
             public string Key { get; init; }
             public DownloadStatus Status { get; init; }
 
@@ -20,7 +21,8 @@ namespace Edger.Unity.Addressable {
                 return string.Format("{{ Key = {0}, Status = {1}/{2} }}", Key, Status.DownloadedBytes, Status.TotalBytes);
             }
         }
-        public struct DownloadSucceeded {
+        public struct OperationSucceeded {
+            public IAssetsOperator Operator { get; init; }
             public string Key { get; init; }
             public DownloadStatus Status { get; init; }
 
@@ -28,7 +30,8 @@ namespace Edger.Unity.Addressable {
                 return string.Format("{{ Key = {0}, Status = {1}/{2} }}", Key, Status.DownloadedBytes, Status.TotalBytes);
             }
         }
-        public struct DownloadFailed {
+        public struct OperationFailed {
+            public IAssetsOperator Operator { get; init; }
             public string Key { get; init; }
             public DownloadStatus Status { get; init; }
             public Exception Error { get; init; }
@@ -37,12 +40,12 @@ namespace Edger.Unity.Addressable {
                 return string.Format("{{ Key = {0}, Status = {1}/{2}, Error = {3} }}", Key, Status.DownloadedBytes, Status.TotalBytes, Error);
             }
         }
-        public class Evt : OneOfBase<DownloadProgress, DownloadSucceeded, DownloadFailed> {
-            private Evt(OneOf<DownloadProgress, DownloadSucceeded, DownloadFailed> _) : base(_) {}
+        public class Evt : OneOfBase<OperationProgress, OperationSucceeded, OperationFailed> {
+            private Evt(OneOf<OperationProgress, OperationSucceeded, OperationFailed> _) : base(_) {}
 
-            public static implicit operator Evt(DownloadProgress _) => new Evt(_);
-            public static implicit operator Evt(DownloadSucceeded _) => new Evt(_);
-            public static implicit operator Evt(DownloadFailed _) => new Evt(_);
+            public static implicit operator Evt(OperationProgress _) => new Evt(_);
+            public static implicit operator Evt(OperationSucceeded _) => new Evt(_);
+            public static implicit operator Evt(OperationFailed _) => new Evt(_);
         }
     }
 }

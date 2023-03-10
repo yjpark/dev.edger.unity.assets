@@ -9,7 +9,7 @@ using Edger.Unity;
 using Edger.Unity.Context;
 
 namespace Edger.Unity.Addressable {
-    public struct ContentLoaderRes {
+    public struct AssetsOperatorRes {
         public AsyncOperationStatus Status { get; init; }
         public DownloadStatus DownloadStatus { get; init; }
         public Exception Error { get; init; }
@@ -18,11 +18,16 @@ namespace Edger.Unity.Addressable {
             return string.Format("{{ Status = {0}, DownloadStatus = {1}/{2}, Error = {3} }}", Status, DownloadStatus.DownloadedBytes, DownloadStatus.TotalBytes, Error);
         }
     }
-    public abstract class ContentLoader<TReq> : CoroutineHandler<TReq, ContentLoaderRes> {
-        public AspectReference<ContentChannel> ContentChannel { get; private set; }
+
+    public interface IAssetsOperator {
+
+    }
+
+    public abstract class AssetsOperator<TReq> : CoroutineHandler<TReq, AssetsOperatorRes>, IAssetsOperator {
+        public AspectReference<AssetsChannel> AssetsChannel { get; private set; }
 
         protected override void OnAwake() {
-            ContentChannel = CacheAspect<ContentChannel>();
+            AssetsChannel = CacheAspect<AssetsChannel>();
         }
 
         protected override IEnumerator DoHandleAsync(int reqIdentity, DateTime reqTime, TReq req) {
@@ -34,8 +39,9 @@ namespace Edger.Unity.Addressable {
                 status = handle.GetDownloadStatus();
                 if (status.DownloadedBytes > lastDownloadedBytes) {
                     lastDownloadedBytes = status.DownloadedBytes;
-                    ContentChannel.Target.FireEvent(new ContentChannel.DownloadProgress {
-                        Key = GetContentKey(req),
+                    AssetsChannel.Target.FireEvent(new AssetsChannel.OperationProgress {
+                        Operator = this,
+                        Key = GetOperationKey(req),
                         Status = status,
                     });
                 }
@@ -43,18 +49,20 @@ namespace Edger.Unity.Addressable {
             }
             status = handle.GetDownloadStatus();
             if (handle.Status == AsyncOperationStatus.Succeeded) {
-                ContentChannel.Target.FireEvent(new ContentChannel.DownloadSucceeded {
-                    Key = GetContentKey(req),
+                AssetsChannel.Target.FireEvent(new AssetsChannel.OperationSucceeded {
+                    Operator = this,
+                    Key = GetOperationKey(req),
                     Status = status,
                 });
             } else {
-                ContentChannel.Target.FireEvent(new ContentChannel.DownloadFailed {
-                    Key = GetContentKey(req),
+                AssetsChannel.Target.FireEvent(new AssetsChannel.OperationFailed {
+                    Operator = this,
+                    Key = GetOperationKey(req),
                     Status = status,
                     Error = handle.OperationException,
                 });
             }
-            SetResponse(reqIdentity, new ContentLoaderRes{
+            SetResponse(reqIdentity, new AssetsOperatorRes{
                 Status = handle.Status,
                 DownloadStatus = status,
                 Error = handle.OperationException,
@@ -62,7 +70,7 @@ namespace Edger.Unity.Addressable {
             Addressables.Release(handle);
         }
 
-        protected abstract string GetContentKey(TReq req);
+        protected abstract string GetOperationKey(TReq req);
         protected abstract AsyncOperationHandle CreateOperationHandle(TReq req);
     }
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 using Edger.Unity;
 using Edger.Unity.Context;
@@ -13,20 +14,26 @@ namespace Edger.Unity.Addressable {
         public static Assets Instance { get => Singleton.GetInstance(ref _Instance); }
 
         // Aspects
-        public AspectReference<ContentChannel> ContentChannel { get; private set; }
+        public AspectReference<AssetsChannel> AssetsChannel { get; private set; }
         public AspectReference<CatalogLoader> CatalogLoader { get; private set; }
-        public AspectReference<AssetLoader> AssetLoader { get; private set; }
+        public AspectReference<AssetsPreloader> AssetsPreloader { get; private set; }
+        public AspectReference<CacheCleaner> CacheCleaner { get; private set; }
 
         protected override void OnAwake() {
             Singleton.SetupInstance(ref _Instance, this);
 
-            ContentChannel = CacheAspect<ContentChannel>();
+            AssetsChannel = CacheAspect<AssetsChannel>();
             CatalogLoader = CacheAspect<CatalogLoader>();
-            AssetLoader = CacheAspect<AssetLoader>();
+            AssetsPreloader = CacheAspect<AssetsPreloader>();
+            CacheCleaner = CacheAspect<CacheCleaner>();
         }
 
-        public void ClearCaching() {
-            Caching.ClearCache();
+        public void ClearAllCache() {
+            if (!Caching.ClearCache()) {
+                Error("ClearAllCache Failed");
+            } else if (LogDebug) {
+                Debug("ClearAllCache Succeeded");
+            }
         }
     }
 }
