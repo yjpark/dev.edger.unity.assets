@@ -28,8 +28,32 @@ namespace Edger.Unity.Addressable {
     }
 
     public class TextLoader : AssetLoader<string> {
+        protected override AsyncOperationHandle CreateOperationHandle(string req) {
+            return Addressables.LoadAssetAsync<TextAsset>(req);
+        }
+
+        protected override string GetResult(AsyncOperationHandle handle) {
+            if (handle.Status == AsyncOperationStatus.Succeeded
+                && handle.Is<AsyncOperationHandle<TextAsset>>()) {
+                return handle.Convert<TextAsset>().Result.text;
+            } else {
+                return default(string);
+            }
+        }
     }
 
     public class BytesLoader : AssetLoader<byte[]> {
+        protected override AsyncOperationHandle CreateOperationHandle(string req) {
+            return Addressables.LoadAssetAsync<TextAsset>(req);
+        }
+
+        protected override byte[] GetResult(AsyncOperationHandle handle) {
+            if (handle.Status == AsyncOperationStatus.Succeeded
+                && handle.Is<AsyncOperationHandle<TextAsset>>()) {
+                return handle.Convert<TextAsset>().Result.bytes;
+            } else {
+                return default(byte[]);
+            }
+        }
     }
 }
