@@ -19,6 +19,11 @@ namespace Edger.Unity.Addressable {
         public AspectReference<AssetsPreloader> AssetsPreloader { get; private set; }
         public AspectReference<SceneLoader> SceneLoader { get; private set; }
         public AspectReference<AssetsSizeCalculator> AssetsSizeCalculator { get; private set; }
+
+        public AspectReference<PrefabLoader> PrefabLoader { get; private set; }
+        public AspectReference<TextLoader> TextLoader { get; private set; }
+        public AspectReference<BytesLoader> BytesLoader { get; private set; }
+
         public AspectReference<CacheCleaner> CacheCleaner { get; private set; }
 
         protected override void OnAwake() {
@@ -29,6 +34,11 @@ namespace Edger.Unity.Addressable {
             AssetsPreloader = CacheAspect<AssetsPreloader>();
             SceneLoader = CacheAspect<SceneLoader>();
             AssetsSizeCalculator = CacheAspect<AssetsSizeCalculator>();
+
+            PrefabLoader = CacheAspect<PrefabLoader>();
+            TextLoader = CacheAspect<TextLoader>();
+            BytesLoader = CacheAspect<BytesLoader>();
+
             CacheCleaner = CacheAspect<CacheCleaner>();
         }
 
