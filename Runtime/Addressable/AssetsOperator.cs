@@ -50,6 +50,7 @@ namespace Edger.Unity.Addressable {
                 }
                 yield return null;
             }
+            yield return null;
             status = handle.GetDownloadStatus();
             var result = GetResult(handle);
             if (handle.Status == AsyncOperationStatus.Succeeded) {

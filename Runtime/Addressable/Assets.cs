@@ -13,11 +13,18 @@ namespace Edger.Unity.Addressable {
         private static Assets _Instance;
         public static Assets Instance { get => Singleton.GetInstance(ref _Instance); }
 
+        public static void ClearAllCache() {
+            if (Caching.ClearCache()) {
+                Info("ClearAllCache Succeeded");
+            } else {
+                Error("ClearAllCache Failed");
+            }
+        }
+
         // Aspects
         public AspectReference<AssetsChannel> AssetsChannel { get; private set; }
         public AspectReference<CatalogLoader> CatalogLoader { get; private set; }
         public AspectReference<AssetsPreloader> AssetsPreloader { get; private set; }
-        public AspectReference<SceneLoader> SceneLoader { get; private set; }
         public AspectReference<AssetsSizeCalculator> AssetsSizeCalculator { get; private set; }
 
         public AspectReference<PrefabLoader> PrefabLoader { get; private set; }
@@ -32,7 +39,6 @@ namespace Edger.Unity.Addressable {
             AssetsChannel = CacheAspect<AssetsChannel>();
             CatalogLoader = CacheAspect<CatalogLoader>();
             AssetsPreloader = CacheAspect<AssetsPreloader>();
-            SceneLoader = CacheAspect<SceneLoader>();
             AssetsSizeCalculator = CacheAspect<AssetsSizeCalculator>();
 
             PrefabLoader = CacheAspect<PrefabLoader>();
@@ -40,14 +46,6 @@ namespace Edger.Unity.Addressable {
             BytesLoader = CacheAspect<BytesLoader>();
 
             CacheCleaner = CacheAspect<CacheCleaner>();
-        }
-
-        public void ClearAllCache() {
-            if (!Caching.ClearCache()) {
-                Error("ClearAllCache Failed");
-            } else if (LogDebug) {
-                Debug("ClearAllCache Succeeded");
-            }
         }
     }
 }
