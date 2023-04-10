@@ -15,9 +15,9 @@ namespace Edger.Unity.Addressable {
 
         public static void ClearAllCache() {
             if (Caching.ClearCache()) {
-                Info("ClearAllCache Succeeded");
+                Log.Info("Assets.ClearAllCache Succeeded");
             } else {
-                Error("ClearAllCache Failed");
+                Log.Error("Assets.ClearAllCache Failed");
             }
         }
 
