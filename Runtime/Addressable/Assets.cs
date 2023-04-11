@@ -5,6 +5,10 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
+#if ODIN_INSPECTOR
+using Sirenix.OdinInspector;
+#endif
+
 using Edger.Unity;
 using Edger.Unity.Context;
 
@@ -13,6 +17,9 @@ namespace Edger.Unity.Addressable {
         private static Assets _Instance;
         public static Assets Instance { get => Singleton.GetInstance(ref _Instance); }
 
+#if ODIN_INSPECTOR
+        [Button(ButtonSizes.Large)]
+#endif
         public static void ClearAllCache() {
             if (Caching.ClearCache()) {
                 Log.Info("Assets.ClearAllCache Succeeded");
