@@ -41,18 +41,18 @@ namespace Edger.Unity.Addressable {
         public AspectReference<CacheCleaner> CacheCleaner { get; private set; }
 
         protected override void OnAwake() {
-            Singleton.SetupInstance(ref _Instance, this);
+            if (Singleton.SetupInstance(ref _Instance, this)) {
+                AssetsChannel = CacheAspect<AssetsChannel>();
+                CatalogLoader = CacheAspect<CatalogLoader>();
+                AssetsPreloader = CacheAspect<AssetsPreloader>();
+                AssetsSizeCalculator = CacheAspect<AssetsSizeCalculator>();
 
-            AssetsChannel = CacheAspect<AssetsChannel>();
-            CatalogLoader = CacheAspect<CatalogLoader>();
-            AssetsPreloader = CacheAspect<AssetsPreloader>();
-            AssetsSizeCalculator = CacheAspect<AssetsSizeCalculator>();
+                PrefabLoader = CacheAspect<PrefabLoader>();
+                TextLoader = CacheAspect<TextLoader>();
+                BytesLoader = CacheAspect<BytesLoader>();
 
-            PrefabLoader = CacheAspect<PrefabLoader>();
-            TextLoader = CacheAspect<TextLoader>();
-            BytesLoader = CacheAspect<BytesLoader>();
-
-            CacheCleaner = CacheAspect<CacheCleaner>();
+                CacheCleaner = CacheAspect<CacheCleaner>();
+            }
         }
     }
 }
